@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="images/opentable.png">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>A/B Sample Size Calculator</title>
+
+  <script src="js/jquery-3.1.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+
+  <script src="js/d3.min.js"></script>
+
+  <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="css/jquery-ui.css" type="text/css">
+  <link rel="stylesheet" href="css/jquery-ui.theme.css" type="text/css">
+  <link rel="stylesheet" href="css/ab_sample_size.css" type="text/css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <h2>A/B Sample Size Calculator</h2>
+      <p>This tool will allow you to estimate required sample sizes for A/B tests that utilize the g-test statistic for significance.</p>
+      <p>Use the sliders to select the current conversion rate and what effect you expect the variant to have on this rate. Finally, specify what percentage of visitors will be allocated to each group and click 'Calculate' to determine the sample size you will need.</p>
+      <p>The tool will report the sample size needed in each group at the 5% significance level. It will also graph how these values might change for different sized treatment effects and different significance levels.</p><br>
+      <form class="form-inline">
+          <div class="row">
+              <div class="form-group col-lg-12">
+                  <label class = "col-lg-3">Baseline conversion rate</label>
+                  <div id="slider_base" class = "col-lg-7">
+                  </div>
+                  <div class="col-lg-2">
+                      <div class="col-lg-6">
+                          <span id="slider_base_val">20%</p>
+                      </div>
+                      <div class="col-lg-6">
+                          <div class="input-group">
+                              <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default btn-number" name="plus_minus" data-type="minus" data-field="slider_base" style="padding: 1px 6px">
+                                      <span class="glyphicon glyphicon-minus"></span>
+                                  </button>
+                              </span>                    
+                              <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default btn-number" name="plus_minus" data-type="plus" data-field="slider_base" style="padding: 1px 6px">
+                                      <span class="glyphicon glyphicon-plus"></span>
+                                  </button>
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="form-group col-lg-12">
+                  <label class = "col-lg-3">Expected effect of variant</label>
+                  <div id="slider_variant" class = "col-lg-7">
+                  </div>
+                  <div class="col-lg-2">
+                      <div class="col-lg-6">
+                          <span id="slider_variant_val">5%</p>
+                      </div>
+                      <div class="col-lg-6">
+                          <div class="input-group">
+                              <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default btn-number" name="plus_minus" data-type="minus" data-field="slider_variant" style="padding: 1px 6px">
+                                      <span class="glyphicon glyphicon-minus"></span>
+                                  </button>
+                              </span>                    
+                              <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default btn-number" name="plus_minus" data-type="plus" data-field="slider_variant" style="padding: 1px 6px">
+                                      <span class="glyphicon glyphicon-plus"></span>
+                                  </button>
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="form-group col-lg-12">
+                  <label class = "col-lg-3"></label>
+                  <div class="radio-inline">
+                      <label><input type="radio" name="absolute_relative_radio" checked value = "Absolute">Absolute</label>
+                  </div>
+                  <div class="radio-inline">
+                      <label><input type="radio" name="absolute_relative_radio" value = "Relative">Relative</label>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="form-group col-lg-12">
+                  <label class = "col-lg-3">Percentage in base</label>
+                  <div id="slider_pct_base" class = "col-lg-7">
+                  </div>
+                  <div class="col-lg-2">
+                      <div class="col-lg-6">
+                          <span id="slider_pct_base_val">50%</p>
+                      </div>
+                      <div class="col-lg-6">
+                          <div class="input-group">
+                              <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default btn-number" name="plus_minus" data-type="minus" data-field="slider_pct_base" style="padding: 1px 6px">
+                                      <span class="glyphicon glyphicon-minus"></span>
+                                  </button>
+                              </span>                    
+                              <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default btn-number" name="plus_minus" data-type="plus" data-field="slider_pct_base" style="padding: 1px 6px">
+                                      <span class="glyphicon glyphicon-plus"></span>
+                                  </button>
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </form>
+      <div class="row" style="text-align: center; margin-top: 25px">
+          <button type="button" class="btn btn-primary btn-lg col-lg-4 col-lg-offset-4" id="calculate">Calculate</button>
+      </div>
+      <div class="row" style="display: none" id="sample_size_display">
+          <div class="col-lg-offset-3 col-lg-6" style="text-align: center">
+              <h2>Sample Size Needed</h2>
+              <div class="row">
+                  <div class="col-lg-6" style="text-align: center">
+                      <h3 id="sample_size_base">Base</h3>
+                      <h4 id="sample_size_base_val">1000</h4>
+                  </div>
+                  <div class="col-lg-6" style="text-align: center">
+                      <h3 id="sample_size_variant">Variant</h3>
+                      <h4 id="sample_size_variant_val">1000</h4>
+                  </div>
+              </div>
+              <p>Use the graphic below to explore how your sample size needs will change as the effect size changes.</p>
+          </div>
+        <!-- <h2 class=id = "sample_size_text"></h2> -->
+      </div>
+    </div>
+    <div class="row">
+      <svg id="ab_chart"></svg>
+    </div>
+  </div>
+  <script src="js/ab_data.js"></script>
+  <script src="js/ab_chart.js"></script>
+  <script src="js/ab_error_checking.js"></script>
+  <script type="text/javascript">
+
+      $( function() {
+
+        ab_inputs = {"slider_base_val": 20, "slider_variant_val": 5, "slider_pct_base_val": 50, "absolute_relative_radio": "Absolute"};
+
+        var change = function(base) {
+          var variant = $("#slider_variant").slider("option", "value");
+          if (ab_inputs['absolute_relative_radio'] == "Absolute") {
+            var max_variant_value = 100 - base;
+          } else {
+            var max_variant_value = 10000 / base - 100;
+          }
+          max_variant_value = Math.round(100 * max_variant_value) / 100;
+          $("#slider_variant").slider("option", "max", max_variant_value);
+          var new_variant_value = Math.min(max_variant_value, variant)
+          $("#slider_variant").slider("option", "value", new_variant_value);
+          $("#slider_variant_val").html(new_variant_value + "%");
+        }
+
+        $("#slider_base").slider({
+          min: .1,
+          max: 95,
+          value: 20, 
+          step: .1,
+          slide: function(event, ui) {
+            $("#slider_base_val").html(ui.value + "%");
+            ab_inputs["slider_base_val"] = ui.value;
+          }, 
+          change: function(event, ui) {
+            change(ui.value);
+          }
+        });
+
+        $("#slider_variant").slider({
+          min: 1,
+          max: 80,
+          value: 5, 
+          step: .1,
+          slide: function(event, ui) {
+            $("#slider_variant_val").html(ui.value + "%");
+            ab_inputs["slider_variant_val"] = ui.value;
+          }
+        });
+
+        $("#slider_pct_base").slider({
+          min: 5,
+          max: 95,
+          value: 50, 
+          step: 5,
+          slide: function(event, ui) {
+            $("#slider_pct_base_val").html(ui.value + "%");
+            ab_inputs["slider_pct_base_val"] = ui.value;
+          }
+        });
+
+        $("button[name='plus_minus']").on("click", function(){
+          var field = $(this).attr("data-field");
+          var step_inc = field == "slider_pct_base" ? 5 : .1; 
+          var step = $(this).attr("data-type") == "minus" ? -1 * step_inc : step_inc;
+          var val = $("#" + field).slider("option", "value");
+          var max = $("#" + field).slider("option", "max");
+          var min = $("#" + field).slider("option", "min");
+          var new_val = Math.round((val + step) * 10) /10;
+          new_val = new_val <= max && new_val >= min ? new_val : val;
+          $("#" + field).slider("option", "value", new_val);
+          $("#" + field + "_val").html(new_val + "%");
+          ab_inputs[field + "_val"] = new_val;
+          if (field == "slider_base") {
+            change(new_val);
+          }
+
+ 
+        })
+
+        $("input[name='absolute_relative_radio']").on("change", function() {
+          ab_inputs['absolute_relative_radio'] = $("input[name='absolute_relative_radio']:checked").val();
+          var base = $("#slider_base").slider("option", "value");
+          change(base);
+          ab_inputs['slider_variant_val'] = $("#slider_variant").slider("option", "value");
+        })
+
+        // Clarify the expected effect and conversion rate definitions
+        $("#calculate").on("click", function() {
+          ab_inputs['absolute_relative_radio'] = $("input[name='absolute_relative_radio']:checked").val();
+          data = get_data(ab_inputs);
+          var data_5 = data['significance_5'];
+          $("#sample_size_display").css("display", "block");
+          $("#sample_size_base").html("Base (" + d3.format(".2%")(data_5['base_cr']) + " CR)");
+          $("#sample_size_variant").html("Variant (" + d3.format(".2%")(data_5['variant_cr']) + " CR)");
+          $("#sample_size_variant_val").html(d3.format(",.0f")(( 1 - data_5['pct_base']) * data_5['sample_size']));
+          $("#sample_size_base_val").html(d3.format(",.0f")(data_5['pct_base'] * data_5['sample_size']));
+          draw_ab_graph(data, ab_inputs['slider_pct_base_val'] / 100);
+
+        })  
+
+      });
+ 
+// check numbers
+// ha for g test
+// cost of test implementation
+
+
+
+  </script>
+
+</body>
+</html>
+

@@ -1,0 +1,256 @@
+body {
+  padding-top: 25px;
+  font-size: 18px;
+}
+
+.barchart rect {
+  fill: rgb(175, 204, 191);
+}
+
+.barchart text,
+.scatter text,
+.line_graph text,
+.histogram text {
+  fill: black;
+  font: 14px Times;
+  text-anchor: middle;
+}
+
+path {
+  fill: none;
+  stroke: black;
+}
+
+path#significance_1 {
+  stroke: #d9534f;
+  stroke-width: 2px;
+}
+
+g#significance_legend_1 circle{
+  fill: #d9534f;
+}
+
+#significance_tracker_1 {
+  fill: #d9534f;
+}
+
+path#significance_5 {
+  stroke: #5cb85c;
+  stroke-width: 2px;
+}
+
+g#significance_legend_5 circle{
+  fill: #5cb85c;
+}
+
+#significance_tracker_5 {
+  fill: #5cb85c;
+}
+
+path#significance_10 {
+  stroke: #428bca;
+  stroke-width: 2px;
+}
+
+g#significance_legend_10 circle{
+  fill: #428bca;
+}
+
+#significance_tracker_10 {
+  fill: #428bca;
+}
+
+.yAxis path,
+.yAxis_2 path {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.yAxis line,
+.yAxis_2 line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.yAxis text,
+.yAxis_2 text {
+    font-family: Times;
+    font-size: 14px;
+}
+
+.xAxis path {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.xAxis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.xAxis text tspan{
+    font-family: Times;
+    font-size: 14px;
+}
+
+text.title {
+    fill: black;
+    font: 25px  Times, serif;
+    text-anchor: start;
+    text-transform: uppercase
+}
+
+div.title {
+    fill: black;
+    font: 25px  Times, serif;
+    text-anchor: start;
+    text-transform: uppercase
+}
+
+text.subtitle {
+    fill: black;
+    font: 18px  Times;
+    text-anchor: start;
+    font-style: italic;
+  
+}
+
+text#xTitle {
+    fill: black;
+    font: 16px  Times;
+    text-anchor: middle;
+    font-style: italic;
+}
+
+text#yTitle,
+text#y2Title {
+    fill: black;
+    font: 16px  Times;
+    text-anchor: middle;
+    font-style: italic;
+
+}
+
+.yAxis line.gridline {
+    fill: none;
+    stroke: black;
+    opacity: .2;
+    shape-rendering: auto;
+    /*stroke-dasharray: 3, 5*/
+}
+
+.scatter_container circle {
+  fill: rgb(175, 204, 191);
+}
+
+.line_graph .line {
+  fill: none;
+  shape-rendering: auto;
+  stroke-width: 1.5px;
+}
+
+#line1 {
+  stroke: rgb(175, 204, 191);
+}
+
+#line2 {
+  stroke: rgb(136, 136, 140);
+}
+
+#line3 {
+  stroke: rgb(154, 189, 210);
+}
+
+#line4 {
+  stroke: rgb(205, 163, 158);
+}
+
+#line5 {
+  stroke: rgb(200, 200, 202);
+}
+
+#line6 {
+  stroke: rgb(255, 234, 183);
+}
+
+.legend rect {
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.legend1 {
+  fill: rgb(175, 204, 191);
+}
+
+.legend2 {
+  fill: rgb(136, 136, 140);
+}
+
+.legend3 {
+  fill: rgb(154, 189, 210);
+}
+
+.legend4 {
+  fill: rgb(205, 163, 158);
+}
+
+.legend5 {
+  fill: rgb(200, 200, 202);
+}
+
+.legend6 {
+  fill: rgb(255, 234, 183);
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.histogram rect {
+  fill: rgb(175, 204, 191);
+}
+
+.focus path {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+    opacity: .5;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-style: italic;
+  padding: 8px;
+  background: #a9cabd;
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: #a9cabd;
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+.error {
+  color: #a94442;
+}
