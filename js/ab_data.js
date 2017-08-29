@@ -73,30 +73,30 @@ var get_data = function(inputs) {
 
   var agg_data = {
     "significance_1" : {
-      "stat" : 6.63,
+      "stat" : 6.635,
       "data": [],
       "base_cr": base_cr,
       "variant_cr": variant_cr,
       "variant_effect": variant_effect,
-      "sample_size": 6.63 / compute_g_stat(variant_cr),
+      "sample_size": 6.635 / compute_g_stat(variant_cr),
       "pct_base": pct_base
     },
     "significance_5" : {
-      "stat" : 3.84,
+      "stat" : 3.841,
       "data": [],
       "base_cr": base_cr,
       "variant_cr": variant_cr,
       "variant_effect": variant_effect,
-      "sample_size": 3.84 / compute_g_stat(variant_cr),
+      "sample_size": 3.841 / compute_g_stat(variant_cr),
       "pct_base": pct_base
     },
     "significance_10" : {
-      "stat" : 2.71,
+      "stat" : 2.706,
       "data": [],
       "base_cr": base_cr,
       "variant_cr": variant_cr,
       "variant_effect": variant_effect,
-      "sample_size": 2.71 / compute_g_stat(variant_cr),
+      "sample_size": 2.706 / compute_g_stat(variant_cr),
       "pct_base": pct_base
     }
   };

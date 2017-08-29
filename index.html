@@ -23,8 +23,10 @@
   <div class="container">
     <div class="row">
       <h2>A/B Sample Size Calculator</h2>
-      <p>This tool will allow you to estimate required sample sizes for A/B tests that utilize the g-test statistic for significance.</p>
-      <p>Use the sliders to select the current conversion rate and what effect you expect the variant to have on this rate. Finally, specify what percentage of visitors will be allocated to each group and click 'Calculate' to determine the sample size you will need.</p>
+      <!-- <p>This tool will allow you to estimate required sample sizes for A/B tests that utilize the g-test statistic for significance.</p> -->
+      <p>Use the sliders to select the current conversion rate and what effect you expect the variant to have on this rate.</p>
+      <p>As a default, 50% of visitors will be assigned to the Base group and 50% will be assigned to the Variant group. However, if you wish to generate results based on a disproportionate allocation, you may do so by unchecking the "I want a 50/50 split..." checkbox.</p>
+      <p>Once you have set these parameters, click 'Calculate' to determine the sample size you will need.</p>
       <p>The tool will report the sample size needed in each group at the 5% significance level. It will also graph how these values might change for different sized treatment effects and different significance levels.</p><br>
       <form class="form-inline">
           <div class="row">
@@ -90,9 +92,20 @@
                   </div>
               </div>
           </div>
-          <div class="row">
+          <br>
+          <div class= "row">
               <div class="form-group col-lg-12">
-                  <label class = "col-lg-3">Percentage in base</label>
+                  <label class = "col-lg-3"></label>
+                  <div class="checkbox">
+                      <label>
+                          <input id="pct_base_checkbox" type="checkbox" checked> I want a 50/50 split between the Base and Variant groups
+                      </label>
+                  </div>
+              </div>
+          </div>
+          <div class="row" style="display:none; margin-top: 15px" id="slider_pct_base_row">
+              <div class="form-group col-lg-12">
+                  <label class = "col-lg-3">Proportion of visitors in Base</label>
                   <div id="slider_pct_base" class = "col-lg-7">
                   </div>
                   <div class="col-lg-2">
@@ -225,6 +238,18 @@
           var base = $("#slider_base").slider("option", "value");
           change(base);
           ab_inputs['slider_variant_val'] = $("#slider_variant").slider("option", "value");
+        })
+
+        $("#pct_base_checkbox").on("click", function() {
+          var checked = $("#pct_base_checkbox").prop("checked");
+          if (checked) {
+            $("#slider_pct_base_row").css("display", "none");
+            $("#slider_pct_base_val").html("50%");
+            ab_inputs["slider_pct_base_val"] = 50;
+            $("#slider_pct_base").slider("value", 50);
+          } else {
+            $("#slider_pct_base_row").css("display", "block");
+          }
         })
 
         // Clarify the expected effect and conversion rate definitions
