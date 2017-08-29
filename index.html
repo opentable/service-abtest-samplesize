@@ -36,7 +36,7 @@
                   </div>
                   <div class="col-lg-2">
                       <div class="col-lg-6">
-                          <span id="slider_base_val">20%</p>
+                          <span id="slider_base_val">10%</p>
                       </div>
                       <div class="col-lg-6">
                           <div class="input-group">
@@ -161,15 +161,16 @@
   <script type="text/javascript">
 
       $( function() {
-
-        ab_inputs = {"slider_base_val": 20, "slider_variant_val": 5, "slider_pct_base_val": 50, "absolute_relative_radio": "Absolute"};
+        var max_abs_increase = 10;
+        var max_rel_increase = 20;
+        ab_inputs = {"slider_base_val": 10, "slider_variant_val": 5, "slider_pct_base_val": 50, "absolute_relative_radio": "Absolute"};
 
         var change = function(base) {
           var variant = $("#slider_variant").slider("option", "value");
           if (ab_inputs['absolute_relative_radio'] == "Absolute") {
-            var max_variant_value = 100 - base;
+            var max_variant_value = Math.min(100 - base, max_abs_increase);
           } else {
-            var max_variant_value = 10000 / base - 100;
+            var max_variant_value = Math.min(10000 / base - 100, max_rel_increase);
           }
           max_variant_value = Math.round(100 * max_variant_value) / 100;
           $("#slider_variant").slider("option", "max", max_variant_value);
@@ -180,9 +181,9 @@
 
         $("#slider_base").slider({
           min: .1,
-          max: 95,
-          value: 20, 
-          step: .1,
+          max: 40,
+          value: 10, 
+          step: .01,
           slide: function(event, ui) {
             $("#slider_base_val").html(ui.value + "%");
             ab_inputs["slider_base_val"] = ui.value;
@@ -193,10 +194,10 @@
         });
 
         $("#slider_variant").slider({
-          min: 1,
-          max: 80,
+          min: .01,
+          max: 10,
           value: 5, 
-          step: .1,
+          step: .01,
           slide: function(event, ui) {
             $("#slider_variant_val").html(ui.value + "%");
             ab_inputs["slider_variant_val"] = ui.value;
@@ -216,12 +217,12 @@
 
         $("button[name='plus_minus']").on("click", function(){
           var field = $(this).attr("data-field");
-          var step_inc = field == "slider_pct_base" ? 5 : .1; 
+          var step_inc = field == "slider_pct_base" ? 5 : .01; 
           var step = $(this).attr("data-type") == "minus" ? -1 * step_inc : step_inc;
           var val = $("#" + field).slider("option", "value");
           var max = $("#" + field).slider("option", "max");
           var min = $("#" + field).slider("option", "min");
-          var new_val = Math.round((val + step) * 10) /10;
+          var new_val = Math.round((val + step) * 100) /100;
           new_val = new_val <= max && new_val >= min ? new_val : val;
           $("#" + field).slider("option", "value", new_val);
           $("#" + field + "_val").html(new_val + "%");
